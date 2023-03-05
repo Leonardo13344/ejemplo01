@@ -15,11 +15,11 @@ using namespace std;
 #define MAX_PUNTOS 30
 #define MAX_CENTROS 3
 
-double distancia_euclidiana(int x1, int y1, int z1, int x2, int y2, int z3){
+double distancia_euclidiana(int x1, int y1, int z1, int x2, int y2, int z2){
     return std::sqrt((x1-x2)*(x1-x2)+(y1-y2)*(y1-y2)+(z1-z2)*(z1-z2));
 }
 
-std::vector<int> encuentra_indice(std::vector<int> datos, std::vector<int> centros, int count){
+/*std::vector<int> encuentra_indice(std::vector<int> datos, std::vector<int> centros, int count){
     std::vector<int> indices;
 
     for(int i = 0; i < count * 3; i+=3){
@@ -28,7 +28,8 @@ std::vector<int> encuentra_indice(std::vector<int> datos, std::vector<int> centr
 
         float d1 = distancia_euclidiana()
     }
-}
+    return null;
+}*/
 
 int main(int argc, char** argv){
     int rank;
@@ -55,8 +56,12 @@ int main(int argc, char** argv){
             //Enviar puntos
             MPI_Send( &A[index], total_puntos * 3, MPI_INT, i, 0, MPI_COMM_WORLD);
             //Enviar centros
-            MPI_Send( &C[0], MAX_CENTROS * 3, MPI_INT, i, 0, MPI_COMM_WORLD);
+            MPI_Send( C.data(), C.size(), MPI_INT, i, 0, MPI_COMM_WORLD);
+            //MPI_Bcast(&C[0], MAX_CENTROS * 3, MPI_INT, 0, MPI_COMM_WORLD);
         }
+
+        //MPI_Barrier(MPI_COMM_WORLD);
+        //MPI_Bcast(C.data(), C.size(), MPI_INT, 0, MPI_COMM_WORLD);
 
         //calcular
         std::vector<int> datos0;
@@ -94,17 +99,18 @@ int main(int argc, char** argv){
     {
         std::vector<int> datos(total_puntos*3);
         std::vector<int> centros(MAX_CENTROS * 3);
-
         MPI_Recv(datos.data(), total_puntos * 3, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         MPI_Recv(centros.data(), MAX_CENTROS * 3, MPI_INT, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        printf("TEST\n");
 
         //calcular distancias
         std::vector<int> aux;
         
-        std::vector<int> distancias = encuentra_indice()
+        std::vector<int> distancias = {9,10,11,12,13};
 
         //enviar los indices
         MPI_Send( distancias.data(), total_puntos, MPI_INT, 0, 0, MPI_COMM_WORLD);
+        
 
     }
 
